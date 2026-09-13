@@ -77,7 +77,7 @@ final List<FinancialProduct> financialProductsCatalog = [
     ],
     feeOrInterest: 'Annual Fee: ₹500 + GST (Waived on ₹1.5L spends)',
     eligibility: 'Salaried / Self-Employed | Age: 21-65 yrs | Min Income: ₹25,000/mo',
-    requiredDocs: ['PAN Card', 'Address Proof', 'Latest 3 Months Salary Slips/ITR'],
+    requiredDocs: ['PAN Card', 'Address Proof', 'Salary Slips / ITR'],
     applyUrl: 'https://bitli.in/jv53q08',
     badgeText: 'Popular UPI Card',
   ),
@@ -96,7 +96,7 @@ final List<FinancialProduct> financialProductsCatalog = [
     ],
     feeOrInterest: 'Joining & Annual Fee: ₹999 + GST (Waived on ₹2L spends)',
     eligibility: 'Age: 21-65 yrs | CIBIL: 720+ | Min Income: ₹30,000/mo',
-    requiredDocs: ['PAN Card', 'Address Proof', 'Latest 3 Months Bank Statements'],
+    requiredDocs: ['PAN Card', 'Address Proof', 'Bank Statements'],
     applyUrl: 'https://bitli.in/y04ENvz',
     badgeText: '5% Cashback',
   ),
@@ -191,7 +191,7 @@ final List<FinancialProduct> financialProductsCatalog = [
     ],
     feeOrInterest: 'Joining & Annual: ₹499 + GST (Waived on ₹1L spends)',
     eligibility: 'Salaried: ₹25k/mo | Self-Employed: ₹4.8L ITR | CIBIL: 720+',
-    requiredDocs: ['PAN Card', 'Address Proof', 'Latest Salary Slip / ITR'],
+    requiredDocs: ['PAN Card', 'Address Proof', 'Salary Slip / ITR'],
     applyUrl: 'https://bitli.in/y04ENvz',
     badgeText: 'Online Spends',
   ),
@@ -498,3 +498,700 @@ final List<FinancialProduct> financialProductsCatalog = [
     feeOrInterest: 'Interest: 14% to 36% p.a. | Tenure: 3-36 mos',
     eligibility: 'Age: 22-50 yrs | Salaried (₹25k) & Self-Employed (₹50k) | CIBIL: 500+',
     requiredDocs: ['PAN Card', 'Address Proof (DigiLocker)', 'Bank Statements'],
+    applyUrl: 'https://bitli.in/bq2aeAm',
+    badgeText: 'Low CIBIL (500+)',
+  ),
+];
+
+// ==================== SPLASH SCREEN ====================
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.82, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+    );
+
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
+
+    _controller.forward();
+
+    Future.delayed(const Duration(milliseconds: 2800), () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 600),
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const FinancialProductsHomeScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF1E3A8A),
+      body: Stack(
+        children: [
+          Center(
+            child: FadeTransition(
+              opacity: _opacityAnimation,
+              child: ScaleTransition(
+                scale: _scaleAnimation,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 96,
+                      height: 96,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(22),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.25),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.account_balance_wallet_rounded,
+                          size: 54,
+                          color: Color(0xFF1E3A8A),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    const Text(
+                      'FinanceHub India',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: 0.6,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Verified Cards & Instant Credit Lines',
+                      style: TextStyle(
+                        fontSize: 13.5,
+                        color: Colors.white70,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: Column(
+              children: [
+                const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.amberAccent),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.verified_user_rounded, color: Colors.white60, size: 15),
+                    SizedBox(width: 6),
+                    Text(
+                      '100% Safe Official Bank Redirection',
+                      style: TextStyle(
+                        color: Colors.white60,
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ==================== HOME SCREEN ====================
+class FinancialProductsHomeScreen extends StatefulWidget {
+  const FinancialProductsHomeScreen({super.key});
+
+  @override
+  State<FinancialProductsHomeScreen> createState() =>
+      _FinancialProductsHomeScreenState();
+}
+
+class _FinancialProductsHomeScreenState
+    extends State<FinancialProductsHomeScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  List<FinancialProduct> _filter(ProductCategory category) {
+    return financialProductsCatalog.where((p) {
+      final matchesCategory = p.category == category;
+      final query = _searchQuery.toLowerCase();
+      final matchesSearch = p.name.toLowerCase().contains(query) ||
+          p.issuer.toLowerCase().contains(query) ||
+          p.headline.toLowerCase().contains(query);
+      return matchesCategory && matchesSearch;
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF1F5F9),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: const Color(0xFF1E3A8A),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              'FinanceHub India',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 19,
+              ),
+            ),
+            Text(
+              'Official Financial Products Portal',
+              style: TextStyle(color: Colors.white70, fontSize: 11.5),
+            ),
+          ],
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(112),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Container(
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextField(
+                    onChanged: (val) => setState(() => _searchQuery = val),
+                    decoration: const InputDecoration(
+                      hintText: 'Search cards, banks, or loans...',
+                      hintStyle: TextStyle(fontSize: 13.5, color: Colors.black45),
+                      prefixIcon: Icon(Icons.search, color: Color(0xFF1E3A8A), size: 20),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 9),
+                    ),
+                  ),
+                ),
+              ),
+              TabBar(
+                controller: _tabController,
+                indicatorColor: Colors.amberAccent,
+                indicatorWeight: 3.5,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.white60,
+                labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                tabs: const [
+                  Tab(icon: Icon(Icons.credit_card, size: 20), text: 'Credit Cards (10)'),
+                  Tab(icon: Icon(Icons.account_balance_wallet, size: 20), text: 'Personal Loans (13)'),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          ProductListView(products: _filter(ProductCategory.creditCard)),
+          ProductListView(products: _filter(ProductCategory.personalLoan)),
+        ],
+      ),
+    );
+  }
+}
+
+// ==================== LIST VIEW ====================
+class ProductListView extends StatelessWidget {
+  final List<FinancialProduct> products;
+
+  const ProductListView({super.key, required this.products});
+
+  @override
+  Widget build(BuildContext context) {
+    if (products.isEmpty) {
+      return const Center(
+        child: Text(
+          'No offers match your search.',
+          style: TextStyle(color: Colors.black54, fontSize: 14),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        return ProductCardItem(product: products[index]);
+      },
+    );
+  }
+}
+
+// ==================== PRODUCT CARD ====================
+class ProductCardItem extends StatelessWidget {
+  final FinancialProduct product;
+
+  const ProductCardItem({super.key, required this.product});
+
+  Future<void> _openOfficialLink(BuildContext context, String urlString) async {
+    final uri = Uri.parse(urlString);
+    try {
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open bank portal.')),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error launching link: $e')),
+        );
+      }
+    }
+  }
+
+  void _showDetailModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => ProductDetailSheet(
+        product: product,
+        onApply: () => _openOfficialLink(context, product.applyUrl),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isCard = product.category == ProductCategory.creditCard;
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      elevation: 1.2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Colors.white,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => _showDetailModal(context),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: Image.network(
+                      product.logoUrl,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        isCard ? Icons.credit_card : Icons.account_balance,
+                        color: const Color(0xFF1E3A8A),
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.name,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0F172A),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          product.issuer,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF64748B),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (product.badgeText != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEFF6FF),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: const Color(0xFFBFDBFE)),
+                      ),
+                      child: Text(
+                        product.badgeText!,
+                        style: const TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1D4ED8),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                product.headline,
+                style: const TextStyle(
+                  fontSize: 12.5,
+                  color: Color(0xFF334155),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Column(
+                children: product.keyBenefits.take(2).map((b) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 3),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.check_circle, size: 14, color: Color(0xFF0D9488)),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            b,
+                            style: const TextStyle(fontSize: 12, color: Color(0xFF475569)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+              const Divider(height: 18, thickness: 0.8, color: Color(0xFFE2E8F0)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          isCard ? 'FEE' : 'TERMS',
+                          style: const TextStyle(
+                            fontSize: 9.5,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF94A3B8),
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        Text(
+                          product.feeOrInterest,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF0F172A),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () => _openOfficialLink(context, product.applyUrl),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1E3A8A),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      elevation: 0,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text('Apply', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                        SizedBox(width: 4),
+                        Icon(Icons.arrow_forward, size: 13),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ==================== DETAIL MODAL SHEET ====================
+class ProductDetailSheet extends StatelessWidget {
+  final FinancialProduct product;
+  final VoidCallback onApply;
+
+  const ProductDetailSheet({super.key, required this.product, required this.onApply});
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.82,
+      maxChildSize: 0.94,
+      minChildSize: 0.5,
+      expand: false,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: ListView(
+            controller: scrollController,
+            children: [
+              Center(
+                child: Container(
+                  width: 38,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Container(
+                    width: 52,
+                    height: 52,
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: Image.network(
+                      product.logoUrl,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => const Icon(
+                        Icons.account_balance,
+                        color: Color(0xFF1E3A8A),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.name,style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0F172A),
+                          ),
+                        ),
+                        Text(
+                          product.issuer,
+                          style: const TextStyle(fontSize: 12.5, color: Color(0xFF64748B)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              _sectionTitle('Key Features & Benefits'),
+              ...product.keyBenefits.map((b) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 3.5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.check_circle_outline, size: 16, color: Color(0xFF0D9488)),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            b,
+                            style: const TextStyle(fontSize: 13, color: Color(0xFF334155)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+              const SizedBox(height: 16),
+              _sectionTitle('Pricing / Charges'),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                ),
+                child: Text(
+                  product.feeOrInterest,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0F172A),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _sectionTitle('Eligibility Criteria'),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                ),
+                child: Text(
+                  product.eligibility,
+                  style: const TextStyle(fontSize: 12.5, color: Color(0xFF334155)),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _sectionTitle('Documents Needed'),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: product.requiredDocs
+                    .map((doc) => Chip(
+                          label: Text(doc, style: const TextStyle(fontSize: 11.5)),
+                          backgroundColor: const Color(0xFFEFF6FF),
+                          side: const BorderSide(color: Color(0xFFBFDBFE)),
+                          avatar: const Icon(Icons.description, size: 15, color: Color(0xFF1D4ED8)),
+                        ))
+                    .toList(),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    onApply();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1E3A8A),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: const Text(
+                    'Apply on Official Bank Website',
+                    style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 13.5,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF0F172A),
+          letterSpacing: 0.3,
+        ),
+      ),
+    );
+  }
+}
+
+                          
