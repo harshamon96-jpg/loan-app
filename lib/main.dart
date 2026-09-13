@@ -1,218 +1,451 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 void main() {
-  runApp(const LoanApp());
+  runApp(const FinProductHubApp());
 }
 
-class LoanApp extends StatelessWidget {
-  const LoanApp({super.key});
+class FinProductHubApp extends StatelessWidget {
+  const FinProductHubApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quick Loan Seva',
+      title: 'FinanceHub India',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1E3A8A)),
-        scaffoldBackgroundColor: const Color(0xFFF8FAFC),
         useMaterial3: true,
-      ),
-      home: const HomeScreen(),
-    );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final _nameController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _amountController = TextEditingController();
-  final _cityController = TextEditingController();
-  String _selectedType = 'Personal Loan';
-
-  final String myWhatsAppNumber = "919693315828";
-  final String bankSathiLink = "https://leads.banksathi.com/?h=cWtPWmp0SDFCSGlxb29MdnkzOXdYZz09";
-  final String voltMoneyLink = "https://voltmoney.in/check-loan-eligibility-against-mutual-funds?ref=IAZRK5";
-
-  Future<void> _openUrl(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      debugPrint('Error opening URL');
-    }
-  }
-
-  void _submitLead() {
-    final name = _nameController.text.trim();
-    final phone = _phoneController.text.trim();
-    final amount = _amountController.text.trim();
-    final city = _cityController.text.trim();
-
-    if (name.isEmpty || phone.isEmpty || amount.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kripya Naam, Mobile aur Amount bharein!')),
-      );
-      return;
-    }
-
-    final message = " *Nayi Loan Application:*\n\n"
-        " *Naam:* $name\n"
-        " *Mobile:* $phone\n"
-        " *Area/City:* ${city.isEmpty ? 'N/A' : city}\n"
-        "️ *Loan Type:* $_selectedType\n"
-        " *Amount Chahiye:* ₹$amount\n\n"
-        "_Kripya eligibility check karein._";
-
-    final whatsappUrl = "https://wa.me/$myWhatsAppNumber?text=${Uri.encodeComponent(message)}";
-    _openUrl(whatsappUrl);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Digital Loan Services', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: const Color(0xFF1E3A8A),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Card(
-              elevation: 0,
-              color: Colors.blue.shade50,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              child: const Padding(
-                padding: EdgeInsets.all(14.0),
-                child: Column(
-                  children: [
-                    Icon(Icons.verified_user_rounded, color: Color(0xFF1E3A8A), size: 36),
-                    SizedBox(height: 6),
-                    Text('Instant Loan Assistance Hub', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                    Text('100% Online • Zero Upfront Fee • Fast Disbursal', style: TextStyle(fontSize: 11, color: Colors.black54)),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text('Customer Details', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Poora Naam (As per PAN)',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.person),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _phoneController,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Mobile Number',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.phone),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _cityController,
-              decoration: const InputDecoration(
-                labelText: 'Shahar / Area Name',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.location_on),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _amountController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Kitna Loan Chahiye (₹)',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.currency_rupee),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              value: _selectedType,
-              decoration: const InputDecoration(
-                labelText: 'Loan Category',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.category),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-              items: const [
-                DropdownMenuItem(value: 'Personal Loan', child: Text('Personal Loan')),
-                DropdownMenuItem(value: 'Business Loan', child: Text('Business Loan (MSME / Shop)')),
-                DropdownMenuItem(value: 'Loan Against Mutual Funds', child: Text('Loan Against Mutual Funds')),
-                DropdownMenuItem(value: 'Credit Card', child: Text('Credit Card Apply')),
-              ],
-              onChanged: (val) => setState(() => _selectedType = val!),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: _submitLead,
-              icon: const Icon(Icons.send, color: Colors.white),
-              label: const Text('Direct Apply Karein (WhatsApp)', style: TextStyle(color: Colors.white, fontSize: 16)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF16A34A),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-            ),
-            const SizedBox(height: 22),
-            const Divider(),
-            const SizedBox(height: 10),
-            const Text('Instant Partner Links', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-            const SizedBox(height: 10),
-            ListTile(
-              tileColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              leading: const Icon(Icons.account_balance, color: Colors.blue),
-              title: const Text('BankSathi Loan Portal', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-              subtitle: const Text('20+ Banks: HDFC, Axis, Bajaj', style: TextStyle(fontSize: 11)),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-              onTap: () => _openUrl(bankSathiLink),
-            ),
-            const SizedBox(height: 8),
-            ListTile(
-              tileColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              leading: const Icon(Icons.trending_up, color: Colors.orange),
-              title: const Text('Volt Money (Mutual Fund Loan)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-              subtitle: const Text('Fast Disbursal • No Income Proof', style: TextStyle(fontSize: 11)),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-              onTap: () => _openUrl(voltMoneyLink),
-            ),
-          ],
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1E3A8A),
+          primary: const Color(0xFF1E3A8A),
+          secondary: const Color(0xFF0D9488),
+          surface: const Color(0xFFF8FAFC),
         ),
+        fontFamily: 'Roboto',
       ),
+      home: const SplashScreen(),
     );
   }
 }
 
+enum ProductCategory { creditCard, personalLoan }
+
+class FinancialProduct {
+  final String id;
+  final String name;
+  final String issuer;
+  final String logoUrl;
+  final ProductCategory category;
+  final String headline;
+  final List<String> keyBenefits;
+  final String feeOrInterest;
+  final String eligibility;
+  final List<String> requiredDocs;
+  final String applyUrl;
+  final String? badgeText;
+
+  FinancialProduct({
+    required this.id,
+    required this.name,
+    required this.issuer,
+    required this.logoUrl,
+    required this.category,
+    required this.headline,
+    required this.keyBenefits,
+    required this.feeOrInterest,
+    required this.eligibility,
+    required this.requiredDocs,
+    required this.applyUrl,
+    this.badgeText,
+  });
+}
+
+// Master clean catalog (10 Cards + 13 Loans)
+final List<FinancialProduct> financialProductsCatalog = [
+  // ==================== 10 CREDIT CARDS ====================
+  FinancialProduct(
+    id: 'cc_1',
+    name: 'Axis Bank MyZone Credit Card',
+    issuer: 'Axis Bank',
+    logoUrl: 'https://companieslogo.com/img/orig/AXISBANK.BO-8f615301.png',
+    category: ProductCategory.creditCard,
+    headline: 'Ideal for entertainment, dining & UPI payments',
+    keyBenefits: [
+      'Flat ₹120 off on Swiggy on min orders of ₹500 (twice/month)',
+      'Buy 1 Get 1 Free on movie tickets via District/Paytm Movies (up to ₹200/mo)',
+      'Complimentary domestic airport lounge access per quarter',
+      'RuPay variant available for direct UPI payments',
+    ],
+    feeOrInterest: 'Annual Fee: ₹500 + GST (Waived on ₹1.5 Lakh annual spends)',
+    eligibility: 'Salaried / Self-Employed | Age: 21-65 yrs | Min Income: ₹25,000/mo',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Latest 3 Months Salary Slips/ITR'],
+    applyUrl: 'https://bitli.in/jv53q08',
+    badgeText: 'Popular UPI Card',
+  ),
+  FinancialProduct(
+    id: 'cc_2',
+    name: 'SBI Cashback Credit Card',
+    issuer: 'SBI Card',
+    logoUrl: 'https://companieslogo.com/img/orig/SBIN.NS-7e289c49.png',
+    category: ProductCategory.creditCard,
+    headline: 'Flat 5% cashback on all online merchant spends',
+    keyBenefits: [
+      '5% Cashback on all online merchant purchases with no merchant lock-in',
+      '1% Cashback on all offline spends',
+      'Direct auto-credit of cashback into statement balance',
+      '1% Fuel surcharge waiver across all petrol pumps in India',
+    ],
+    feeOrInterest: 'Joining & Annual Fee: ₹999 + GST (Waived on ₹2 Lakh spends)',
+    eligibility: 'Age: 21-65 yrs | CIBIL: 720+ | Min Monthly Income: ₹30,000',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Latest 3 Months Bank Statements'],
+    applyUrl: 'https://bitli.in/y04ENvz',
+    badgeText: '5% Flat Cashback',
+  ),
+  FinancialProduct(
+    id: 'cc_3',
+    name: 'Axis Bank Indian Oil Credit Card',
+    issuer: 'Axis Bank',
+    logoUrl: 'https://companieslogo.com/img/orig/AXISBANK.BO-8f615301.png',
+    category: ProductCategory.creditCard,
+    headline: 'Save up to 4% value back on fuel at IndianOil outlets',
+    keyBenefits: [
+      '4% value back as reward points at Indian Oil fuel outlets',
+      '1% Fuel surcharge waiver on transactions between ₹200 and ₹5,000',
+      '1% value back on online shopping',
+      'Instant discount on BookMyShow movie tickets',
+    ],
+    feeOrInterest: 'Joining Fee: ₹500 (Waived on ₹50,000 annual spend)',
+    eligibility: 'Salaried & Self-Employed | Age: 21-65 yrs | CIBIL: 700+',
+    requiredDocs: ['PAN Card', 'Identity Proof', 'Income Proof (Form 16 / Salary Slip)'],
+    applyUrl: 'https://bitli.in/jv53q08',
+    badgeText: 'Fuel Saver',
+  ),
+  FinancialProduct(
+    id: 'cc_4',
+    name: 'RBL Bank Shoprite Credit Card',
+    issuer: 'RBL Bank',
+    logoUrl: 'https://companieslogo.com/img/orig/RBLBANK.NS-99b828a5.png',
+    category: ProductCategory.creditCard,
+    headline: 'Zero annual fee card for grocery shopping & movie rewards',
+    keyBenefits: [
+      'Lifetime Free offer for eligible applicants',
+      '20 Reward Points per ₹100 spent on Grocery purchases',
+      '10% discount on BookMyShow movie tickets (up to 15 times a year)',
+      '1 Reward Point per ₹100 on all other regular transactions',
+    ],
+    feeOrInterest: 'Joining & Annual Fee: Lifetime Free / Nil',
+    eligibility: 'Age: 21-65 yrs | CIBIL: 680+ | Salaried / Self-Employed',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Recent Photograph'],
+    applyUrl: 'https://bitli.in/gnn9nk5',
+    badgeText: 'Lifetime Free',
+  ),
+  FinancialProduct(
+    id: 'cc_5',
+    name: 'Kiwi UPI RuPay Credit Card',
+    issuer: 'Kiwi / Axis Bank',
+    logoUrl: 'https://companieslogo.com/img/orig/AXISBANK.BO-8f615301.png',
+    category: ProductCategory.creditCard,
+    headline: 'Scan & Pay via UPI with virtual credit card & direct rewards',
+    keyBenefits: [
+      'Scan any merchant QR code and pay directly using Credit Card on UPI',
+      'Up to 2% flat cashback on UPI transactions',
+      '100% digital instant approval and virtual card issuance in minutes',
+      'Zero joining fee and zero annual fee',
+    ],
+    feeOrInterest: 'Lifetime Free (Zero Annual Charges)',
+    eligibility: 'Age: 21-55 yrs | Valid PAN & mobile | CIBIL: 650+',
+    requiredDocs: ['PAN Card', 'Paperless Instant Digital e-KYC'],
+    applyUrl: 'https://bitli.in/whEK3co',
+    badgeText: 'Instant UPI Card',
+  ),
+  FinancialProduct(
+    id: 'cc_6',
+    name: 'HDFC Bank IRCTC Credit Card',
+    issuer: 'HDFC Bank',
+    logoUrl: 'https://companieslogo.com/img/orig/HDB-642cf326.png',
+    category: ProductCategory.creditCard,
+    headline: 'Exclusive train ticket savings & executive railway lounge visits',
+    keyBenefits: [
+      'Up to 5% cashback on train ticket bookings via IRCTC app/portal',
+      'Complimentary access to select Executive Railway Lounges across India',
+      '1% transaction charge waiver on IRCTC bookings',
+      '₹500 IRCTC welcome voucher on card activation',
+    ],
+    feeOrInterest: 'Annual Fee: ₹500 + GST (Renewal fee waived on ₹1.5L spends)',
+    eligibility: 'Age: 21-60 yrs | Min Income: ₹25,000/mo | CIBIL: 700+',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Last 3 Months Salary Slips'],
+    applyUrl: 'https://bitli.in/oekzuQt',
+    badgeText: 'Train Travel',
+  ),
+  FinancialProduct(
+    id: 'cc_7',
+    name: 'SBI SimplyCLICK Credit Card',
+    issuer: 'SBI Card',
+    logoUrl: 'https://companieslogo.com/img/orig/SBIN.NS-7e289c49.png',
+    category: ProductCategory.creditCard,
+    headline: '10X reward multipliers on major online shopping platforms',
+    keyBenefits: [
+      '10X Reward Points on Amazon, BookMyShow, Cleartrip, Swiggy & Netmeds',
+      '5X Reward Points on all other online spends',
+      '₹500 Amazon Gift Card as welcome benefit on fee payment',
+      'Milestone travel e-vouchers up to ₹4,000 yearly',
+    ],
+    feeOrInterest: 'Joining & Annual: ₹499 + GST (Waived on ₹1,00,000 spends)',
+    eligibility: 'Salaried: ₹25,000/mo | Self-Employed: ₹4.8L ITR | CIBIL: 720+',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Latest Salary Slip / ITR'],
+    applyUrl: 'https://bitli.in/y04ENvz',
+    badgeText: 'Top Online Spends',
+  ),
+  FinancialProduct(
+    id: 'cc_8',
+    name: 'SBI SimplySAVE Credit Card',
+    issuer: 'SBI Card',
+    logoUrl: 'https://companieslogo.com/img/orig/SBIN.NS-7e289c49.png',
+    category: ProductCategory.creditCard,
+    headline: 'High rewards on daily essentials, groceries & dining',
+    keyBenefits: [
+      '10 Reward Points per ₹150 spent on Dining, Movies, Groceries & Stores',
+      'Welcome bonus of 2,000 reward points (worth ₹500) on ₹2,000 spends',
+      '1% Fuel Surcharge Waiver on spends between ₹500 and ₹3,000',
+      'Worldwide acceptance with emergency card replacement facility',
+    ],
+    feeOrInterest: 'Joining & Annual: ₹499 + GST (Waived on ₹1 Lakh annual spends)',
+    eligibility: 'Age: 21-65 yrs | Salaried & Self-Employed | Min Income: ₹30,000/mo',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Income Proof'],
+    applyUrl: 'https://bitli.in/f3fwpwO',
+    badgeText: 'Daily Groceries',
+  ),
+  FinancialProduct(
+    id: 'cc_9',
+    name: 'BOBCARD Eterna Credit Card',
+    issuer: 'Bank of Baroda',
+    logoUrl: 'https://companieslogo.com/img/orig/BANKBARODA.BO-d2bbdae3.png',
+    category: ProductCategory.creditCard,
+    headline: 'Premium card with unlimited domestic lounge access & low forex',
+    keyBenefits: [
+      'First Year Free limited-time welcome program',
+      'Unlimited complimentary domestic airport lounge access across India',
+      '15 Reward Points per ₹100 on dining, travel & international spends',
+      'Buy 1 Get 1 free movie tickets every month via District app',
+      'FITPASS PRO 12-month membership worth ₹48,000 on initial spends',
+    ],
+    feeOrInterest: 'First Year Free (Renewal: ₹2,499 + GST; Waived on ₹2.5L spends)',
+    eligibility: 'Age: 21-65 yrs | Annual Income: ₹12 Lakhs/annum | CIBIL: 650+',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Form 16 / Salary Slips / ITR'],
+    applyUrl: 'https://bitli.in/2icw2gT',
+    badgeText: 'Airport Lounge',
+  ),
+  FinancialProduct(
+    id: 'cc_10',
+    name: 'BOBCARD Classic / Platinum',
+    issuer: 'Bank of Baroda',
+    logoUrl: 'https://companieslogo.com/img/orig/BANKBARODA.BO-d2bbdae3.png',
+    category: ProductCategory.creditCard,
+    headline: 'Dependable card with merchant savings, cashback & easy EMI',
+    keyBenefits: [
+      'Reward points redeemable for merchandise, flights & vouchers',
+      '1% fuel surcharge waiver across all authorized fuel stations',
+      'Easy 1-click EMI conversion options for transactions',
+      'Complimentary insurance coverage for cardholder protection',
+    ],
+    feeOrInterest: 'Nominal joining fee with milestone annual waivers',
+    eligibility: 'Age: 21-65 yrs | Salaried & Self-Employed | CIBIL: 650+',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Bank Statements'],
+    applyUrl: 'https://bitli.in/gnn9nk5',
+    badgeText: 'Everyday Value',
+  ),
+
+  // ==================== 13 PERSONAL LOANS ====================
+  FinancialProduct(
+    id: 'loan_1',
+    name: 'Axis Bank Personal Loan',
+    issuer: 'Axis Bank',
+    logoUrl: 'https://companieslogo.com/img/orig/AXISBANK.BO-8f615301.png',
+    category: ProductCategory.personalLoan,
+    headline: 'High ticket personal loans up to ₹40 Lakhs with quick approval',
+    keyBenefits: [
+      'Borrow from ₹50,000 up to ₹40 Lakhs for personal needs',
+      'Interest rates starting from 9.99% p.a.',
+      'Flexible repayment tenure up to 84 months (7 years)',
+      'Balance transfer option to consolidate existing loans',
+    ],
+    feeOrInterest: 'Interest Rate: Starting 9.99% p.a. | Tenure: Up to 84 months',
+    eligibility: 'Salaried Only | Age: 21-60 yrs | Existing: ₹30k/mo, New: ₹40k/mo | CIBIL: 700+',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Last 3 Months Salary Slips & Bank Statements'],
+    applyUrl: 'https://bitli.in/jv53q08',
+    badgeText: 'Up to ₹40 Lakhs',
+  ),
+  FinancialProduct(
+    id: 'loan_2',
+    name: 'Poonawalla Fincorp Personal Loan',
+    issuer: 'Poonawalla Fincorp',
+    logoUrl: 'https://companieslogo.com/img/orig/POONAWALLA.NS-1811805b.png',
+    category: ProductCategory.personalLoan,
+    headline: '100% digital journey with zero foreclosure charges',
+    keyBenefits: [
+      'Instant digital approval up to ₹15 Lakhs within minutes',
+      'Zero prepayment and zero foreclosure charges',
+      'Attractive ROI starting at 11.50% p.a.',
+      'Paperless online processing with minimal documentation',
+    ],
+    feeOrInterest: 'Interest Rate: From 11.50% p.a. | Tenure: Up to 84 months',
+    eligibility: 'Salaried & Self-Employed | Age: 24-55 yrs | Min Income: ₹3 Lakhs/yr | CIBIL: 720+',
+    requiredDocs: ['PAN Card', 'Address Proof'],
+    applyUrl: 'https://bitli.in/ADi9XMg',
+    badgeText: 'Zero Foreclosure',
+  ),
+  FinancialProduct(
+    id: 'loan_3',
+    name: 'Bajaj Finserv Personal Loan',
+    issuer: 'Bajaj Finserv',
+    logoUrl: 'https://companieslogo.com/img/orig/BAJAJFINSV.NS-826a7e58.png',
+    category: ProductCategory.personalLoan,
+    headline: 'High funding up to ₹55 Lakhs with Flexi/Overdraft credit line',
+    keyBenefits: [
+      'Sanctioned loan amount up to ₹55 Lakhs',
+      'Flexi Hybrid facility: Pay interest solely on the amount used',
+      'Flexible loan tenure up to 96 months (8 years)',
+      'Quick digital verification with fast bank disbursement',
+    ],
+    feeOrInterest: 'Interest Rate: Starting 11.00% p.a. | Tenure: Up to 96 months',
+    eligibility: 'Salaried Only | Age: 25-57 yrs | Min Monthly Income: ₹35,000 | CIBIL: 685+',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Last 3 Months Bank Statements & Payslips'],
+    applyUrl: 'https://bitli.in/hsuwdq4',
+    badgeText: 'Flexi Overdraft',
+  ),
+  FinancialProduct(
+    id: 'loan_4',
+    name: 'Tata Capital Personal Loan',
+    issuer: 'Tata Capital',
+    logoUrl: 'https://companieslogo.com/img/orig/TATACONSUM.NS-5527ca3d.png',
+    category: ProductCategory.personalLoan,
+    headline: 'Instant loan & balance transfer facility backed by Tata Trust',
+    keyBenefits: [
+      'Personal loan and overdraft facility up to ₹35 Lakhs',
+      'Interest rates starting from 10.99% p.a.',
+      'Flexible loan tenure up to 84 months',
+      'Seamless balance transfer facility to lower current EMIs',
+    ],
+    feeOrInterest: 'Interest Rate: Starting 10.99% p.a. | Tenure: Up to 84 months',
+    eligibility: 'Salaried Professionals | Age: 21-58 yrs | Min Monthly Income: ₹25,000 | CIBIL: 725+',
+    requiredDocs: ['PAN Card', 'Address Proof', '3 Months Bank Statements & Pay Slips'],
+    applyUrl: 'https://bitli.in/XU9d9v1',
+    badgeText: 'Low ROI 10.99%',
+  ),
+  FinancialProduct(
+    id: 'loan_5',
+    name: 'HDFC Bank Personal Loan',
+    issuer: 'HDFC Bank',
+    logoUrl: 'https://companieslogo.com/img/orig/HDB-642cf326.png',
+    category: ProductCategory.personalLoan,
+    headline: 'Maximum loan disbursal up to ₹75 Lakhs with lowest rates',
+    keyBenefits: [
+      'Highest funding capacity up to ₹75 Lakhs',
+      'Interest rates starting from just 9.99% p.a.',
+      'Instant disbursal for pre-approved account holders',
+      'Flexible tenure up to 84 months with minimal paperwork',
+    ],
+    feeOrInterest: 'Interest Rate: Starting 9.99% p.a. | Tenure: Up to 84 months',
+    eligibility: 'Salaried Only | Age: 21-60 yrs | Min Income: ₹30,000 (HDFC), ₹40,000 (Non-HDFC) | CIBIL: 700+',
+    requiredDocs: ['PAN Card', 'Address Proof', 'Latest 3 Months Salary Slips & Bank Statements'],
+    applyUrl: 'https://bitli.in/oekzuQt',
+    badgeText: 'Up to ₹75 Lakhs',
+  ),
+  FinancialProduct(
+    id: 'loan_6',
+    name: 'Olyv Instant Personal Loan',
+    issuer: 'Olyv',
+    logoUrl: 'https://companieslogo.com/img/orig/AXISBANK.BO-8f615301.png',
+    category: ProductCategory.personalLoan,
+    headline: 'Quick digital credit up to ₹2 Lakhs for salaried & self-employed',
+    keyBenefits: [
+      'Instant small-ticket loans up to ₹2,00,000',
+      '100% Mobile paperless journey with instant verification',
+      'Open to both Salaried and Self-Employed individuals',
+      'Quick direct bank transfer after agreement signing',
+    ],
+    feeOrInterest: 'Competitive interest rates | Flexible short-to-medium tenures',
+    eligibility: 'Age: 21-45 yrs | Salaried & Self-Employed | Min Income: ₹20,000/mo | CIBIL: 680+',
+    requiredDocs: ['PAN Card', 'Address Proof', '3 Months Bank Statements & Pay Slips'],
+    applyUrl: 'https://bitli.in/oToYr46',
+    badgeText: 'Instant ₹2 Lakhs',
+  ),
+  FinancialProduct(
+    id: 'loan_7',
+    name: 'Prefr Instant Personal Loan',
+    issuer: 'Prefr Loans',
+    logoUrl: 'https://companieslogo.com/img/orig/BAJAJFINSV.NS-826a7e58.png',
+    category: ProductCategory.personalLoan,
+    headline: '24x7 digital lending access with Account Aggregator sync',
+    keyBenefits: [
+      'Digital loan up to ₹3,00,000 with 24/7 instant cash availability',
+      'Fast automated approval via RBI Account Aggregator banking sync',
+      'Tailored solutions for salaried and self-employed individuals',
+      'Flexible repayment options to match your cash flow',
+    ],
+    feeOrInterest: 'Transparent digital processing | Competitive interest rates',
+    eligibility: 'Age: 22-55 yrs | Salaried & Self-Employed | Min Income: ₹25,000/mo | CIBIL: 725+',
+    requiredDocs: ['PAN Card', 'Account Aggregator digital banking access or Pay Slips'],
+    applyUrl: 'https://bitli.in/98YszFL',
+    badgeText: '24x7 Access',
+  ),
+  FinancialProduct(
+    id: 'loan_8',
+    name: 'Zype Instant Personal Loan & Credit Line',
+    issuer: 'Zype Lending',
+    logoUrl: 'https://companieslogo.com/img/orig/RBLBANK.NS-99b828a5.png',
+    category: ProductCategory.personalLoan,
+    headline: 'Instant 60-second credit line up to ₹1.5 Lakhs with no documents',
+    keyBenefits: [
+      'Pre-approved credit line from ₹5,000 to ₹1,50,000 in 60 seconds',
+      'No physical documentation required - zero paperwork',
+      'Zero foreclosure fees when paying off early',
+      'Flexible repayment options between 6 to 12 months',
+    ],
+    feeOrInterest: 'Zero Foreclosure Fee | Transparent monthly EMI rates',
+    eligibility: 'Salaried Only | Age: 21-50 yrs | Min Monthly Income: ₹20,000 | CIBIL: 650+',
+    requiredDocs: ['Paperless - Instant mobile & ID verification'],
+    applyUrl: 'https://bitli.in/cXtTNIP',
+    badgeText: '60-Sec Approval',
+  ),
+  FinancialProduct(
+    id: 'loan_9',
+    name: 'MyEazyLoan Multi-Lender Marketplace',
+    issuer: 'MyEazyLoan Partners',
+    logoUrl: 'https://companieslogo.com/img/orig/HDB-642cf326.png',
+    category: ProductCategory.personalLoan,
+    headline: 'Compare quotes from 6+ top banks in a single digital check',
+    keyBenefits: [
+      'Compare offers across HDFC, Axis, Bajaj Finserv, Tata Capital & others',
+      'Transparent comparison of interest rates, EMIs, and tenures',
+      'Single application avoids multiple hard inquiries on credit report',
+      'High approval rates tailored to your exact profile',
+    ],
+    feeOrInterest: 'Rates vary by matched lender (from 9.99% p.a. upwards)',
+    eligibility: 'Age: 18-60 yrs | Salaried & Self-Employed | CIBIL: 700+',
+    requiredDocs: ['PAN Card', 'Address Proof', '3-6 Months Bank Statements'],
+    applyUrl: 'https://bitli.in/whEK3co',
+    badgeText: 'Compare & Save',
+  ),
+  FinancialProduct(
+    id: 'loan_10',
+    name: 'Fibe Instant Personal Loan',
+    issuer: 'Fibe',
+    logoUrl: 'https://companieslogo.com/img/orig/SBIN.NS-7e289c49.png',
+    category: ProductCategory.personalLoan,
+    headline: 'Zero foreclosure charges with instant account crediting',
+    keyBenefits: [
+      'Instant personal loan up to ₹5,00,000',
+      'Zero foreclosure fees - pay early with zero penalty',
+      'Pay interest only on the exact borrowed amount',
+      'Completely digital journey with instant bank transfer',
+    ],
+    feeOrInterest: 'Interest starts from 20% p.a. | Tenure up to 36 months',
+    eligibility: 'Salaried Only | Age: 19-55 yrs | Min Monthly Income: ₹20,000 | CIBIL: 680+ (1 yr history)',
+    requiredDocs: ['PAN Card', 'Bank Statements'],
+    applyUrl: 'https://bitli.in/fle3BLs',
+    badgeText: 'Zero Foreclosure',
+  ),
+  FinancialProduct(
+    id: '
