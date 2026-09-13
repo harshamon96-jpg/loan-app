@@ -37,9 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final _cityController = TextEditingController();
   String _selectedType = 'Personal Loan';
 
-  final String myWhatsAppNumber = "919876543210";
-  final String bankSathiLink = "https://banksathi.com";
-  final String voltMoneyLink = "https://voltmoney.com";
+  final String myWhatsAppNumber = "919693315828";
+  final String bankSathiLink = "https://leads.banksathi.com/?h=cWtPWmp0SDFCSGlxb29MdnkzOXdYZz09";
+  final String voltMoneyLink = "https://voltmoney.in/check-loan-eligibility-against-mutual-funds?ref=IAZRK5";
 
   Future<void> _openUrl(String url) async {
     final Uri uri = Uri.parse(url);
